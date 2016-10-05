@@ -1,6 +1,6 @@
 import WebVRManager from 'webvr-boilerplate'
 import WebVRPolyfill from 'webvr-polyfill'
-import RayInput from '../input/ray-input'
+import RayInput from '../ray-input'
 
 const WIDTH = 2;
 const HEIGHT = 2;
@@ -68,6 +68,13 @@ export default class MenuRenderer {
     this.controls.update();
     this.rayInput.update();
     this.effect.render(this.scene, this.camera);
+  }
+
+  resize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.rayInput.setSize(this.renderer.getSize());
   }
 
   handleAction_(opt_mesh) {

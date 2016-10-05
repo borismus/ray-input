@@ -5,6 +5,8 @@ let renderer;
 function onLoad() {
   renderer = new MenuRenderer();
 
+  window.addEventListener('resize', () => { renderer.resize() });
+
   render();
 }
 
