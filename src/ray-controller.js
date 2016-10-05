@@ -48,9 +48,13 @@ export default class RayController extends EventEmitter {
     window.addEventListener('gamepadconnected', this.onGamepadConnected_.bind(this));
 
     // VR Events.
-    navigator.getVRDisplays().then(function(displays) {
-      this.vrDisplay = displays[0];
-    }.bind(this));
+    if (!navigator.getVRDisplays) {
+      console.warn('WebVR API not available! Consider using the webvr-polyfill.');
+    } else {
+      navigator.getVRDisplays().then((displays) => {
+        this.vrDisplay = displays[0];
+      });
+    }
     window.addEventListener('vrdisplaypresentchange', this.onVRDisplayPresentChange_.bind(this));
   }
 
