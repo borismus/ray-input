@@ -1,0 +1,22 @@
+{
+  "name": "Ray.js",
+  "version": "0.0.1",
+  "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard-like, Daydream and Vive.",
+  "main": "src/main.js",
+  "scripts": {
+    "watch": "watchify -vdt [ babelify --presets [ es2015 ] ] src/main.js -o build/all.js",
+    "watch-simulator": "watchify -vdt [ babelify --presets [ es2015 ] ] src/simulator/main.js -o build/all-simulator.js"
+  },
+  "author": "Boris Smus",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "eventemitter3": "^1.2.0",
+    "three": "^0.81.2",
+    "tween": "^0.9.0",
+    "webvr-boilerplate": "^0.4.6",
+    "webvr-polyfill": "^0.9.15"
+  },
+  "devDependencies": {
+    "babelify": "^7.3.0"
+  }
+}
