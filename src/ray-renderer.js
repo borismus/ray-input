@@ -1,9 +1,11 @@
+import {base64} from './util'
 import EventEmitter from 'eventemitter3'
 
 const RETICLE_DISTANCE = 3;
 const INNER_RADIUS = 0.02;
 const OUTER_RADIUS = 0.04;
 const RAY_RADIUS = 0.02;
+const GRADIENT_IMAGE = base64('image/png', 'iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAABdklEQVR4nO3WwXHEQAwDQcin/FOWw+BjuiPYB2q4G2nP933P9SO4824zgDADiDOAuHfb3/UjuKMAcQYQZwBx/gBxChCnAHEKEKcAcQoQpwBxChCnAHEGEGcAcf4AcQoQZwBxBhBnAHEGEGcAcQYQZwBxBhBnAHEGEGcAcQYQZwBxBhBnAHHvtt/1I7ijAHEGEGcAcf4AcQoQZwBxTkCcAsQZQJwTEKcAcQoQpwBxBhDnBMQpQJwCxClAnALEKUCcAsQpQJwCxClAnALEKUCcAsQpQJwBxDkBcQoQpwBxChCnAHEKEKcAcQoQpwBxChCnAHEKEGcAcU5AnALEKUCcAsQZQJwTEKcAcQYQ5wTEKUCcAcQZQJw/QJwCxBlAnAHEGUCcAcQZQJwBxBlAnAHEGUCcAcQZQJwBxBlAnAHEGUDcu+25fgR3FCDOAOIMIM4fIE4B4hQgTgHiFCBOAeIUIE4B4hQgzgDiDCDOHyBOAeIMIM4A4v4B/5IF9eD6QxgAAAAASUVORK5CYII=');
 
 /**
  * Handles ray input selection from frame of reference of an arbitrary object.
@@ -282,7 +284,7 @@ export default class RayRenderer extends EventEmitter {
     // Create a cylindrical ray.
     var geometry = new THREE.CylinderGeometry(RAY_RADIUS, RAY_RADIUS, 1, 32);
     var material = new THREE.MeshBasicMaterial({
-      map: THREE.ImageUtils.loadTexture('./static/gradient.png'),
+      map: THREE.ImageUtils.loadTexture(GRADIENT_IMAGE),
       //color: 0xffffff,
       transparent: true,
       opacity: 0.3
