@@ -43,10 +43,10 @@ export default class RayInput extends EventEmitter {
   }
 
   update() {
-    var lookAt = new THREE.Vector3(0, 0, -1);
+    let lookAt = new THREE.Vector3(0, 0, -1);
     lookAt.applyQuaternion(this.camera.quaternion);
 
-    var mode = this.controller.getInteractionMode()
+    let mode = this.controller.getInteractionMode()
     switch (mode) {
       case InteractionModes.MOUSE:
         // Desktop mouse mode, mouse coordinates are what matters.
@@ -72,11 +72,11 @@ export default class RayInput extends EventEmitter {
         // Daydream, our origin is slightly off (depending on handedness).
         // But we should be using the orientation from the gamepad.
         // TODO(smus): Implement the real arm model.
-        var pose = this.controller.getGamepadPose();
+        let pose = this.controller.getGamepadPose();
 
         // Debug only: use camera as input controller.
-        //var controllerOrientation = this.camera.quaternion;
-        var controllerOrientation = new THREE.Quaternion().fromArray(pose.orientation);
+        //let controllerOrientation = this.camera.quaternion;
+        let controllerOrientation = new THREE.Quaternion().fromArray(pose.orientation);
 
         // Transform the controller into the camera coordinate system.
         /*
@@ -93,7 +93,7 @@ export default class RayInput extends EventEmitter {
         this.armModel.update();
 
         // Get resulting pose and configure the renderer.
-        var modelPose = this.armModel.getPose();
+        let modelPose = this.armModel.getPose();
         this.renderer.setPosition(modelPose.position);
         //this.renderer.setPosition(new THREE.Vector3());
         this.renderer.setOrientation(modelPose.orientation);
@@ -129,7 +129,7 @@ export default class RayInput extends EventEmitter {
   }
 
   getRightDirection() {
-    var lookAt = new THREE.Vector3(0, 0, -1);
+    let lookAt = new THREE.Vector3(0, 0, -1);
     lookAt.applyQuaternion(this.camera.quaternion);
     return new THREE.Vector3().crossVectors(lookAt, this.camera.up);
   }
@@ -138,7 +138,7 @@ export default class RayInput extends EventEmitter {
     console.log('onAction_');
     this.fireActiveMeshEvent_('onAction');
 
-    var mesh = this.renderer.getSelectedMesh();
+    let mesh = this.renderer.getSelectedMesh();
     this.emit('action', mesh);
 
     this.renderer.setActive(true);
@@ -148,7 +148,7 @@ export default class RayInput extends EventEmitter {
     console.log('onRelease_');
     this.fireActiveMeshEvent_('onRelease');
 
-    var mesh = this.renderer.getSelectedMesh();
+    let mesh = this.renderer.getSelectedMesh();
     this.emit('release', mesh);
 
     this.renderer.setActive(false);
@@ -156,17 +156,17 @@ export default class RayInput extends EventEmitter {
 
   onCancel_(e) {
     console.log('onCancel_');
-    var mesh = this.renderer.getSelectedMesh();
+    let mesh = this.renderer.getSelectedMesh();
     this.emit('cancel', mesh);
   }
 
   fireActiveMeshEvent_(eventName) {
-    var mesh = this.renderer.getSelectedMesh();
+    let mesh = this.renderer.getSelectedMesh();
     if (!mesh) {
       //console.info('No mesh selected.');
       return;
     }
-    var handlers = this.handlers[mesh.id];
+    let handlers = this.handlers[mesh.id];
     if (!handlers) {
       //console.info('No handlers for mesh with id %s.', mesh.id);
       return;
