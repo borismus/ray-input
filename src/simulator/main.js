@@ -1,6 +1,6 @@
 import dat from 'dat-gui';
 import DaydreamSimulator from './daydream-simulator';
-import DaydreamArmModel from '../input/daydream-arm-model';
+import DaydreamArmModel from '../daydream-arm-model';
 
 var simulator;
 var model;
