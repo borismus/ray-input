@@ -1,5 +1,5 @@
 export default {
   entry: 'index.js',
-  format: 'umd',
+  format: 'cjs',
   dest: 'build/ray.js'
 };
