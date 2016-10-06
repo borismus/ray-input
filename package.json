@@ -1,8 +1,8 @@
 {
-  "name": "Ray.js",
+  "name": "ray",
   "version": "0.0.1",
   "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard, Daydream and Vive.",
-  "main": "build/ray.min.js",
+  "main": "src/main.js",
   "scripts": {
     "build": "browserify -s ray -vdt [ babelify --presets [ es2015 ] ] src/main.js | uglify -c > build/ray.min.js",
     "watch": "watchify -s ray -vdt [ babelify --presets [ es2015 ] ] src/main.js -o build/ray.js",
