@@ -3,13 +3,21 @@ Ray.js: generalized VR input
 
 Ray.js is a JavaScript library that provides an input abstraction for
 interacting with 3D VR content in the browser. It supports a variety of
-environments:
+environments: desktop, mobile, and VR. In VR mode, behavior depends on if
+there's a motion controller, and whether the controller has positional tracking
+in addition to orientation tracking. For a higher level description of the
+library, see [Cross device 3D input][smus].
 
-- On desktop, look around by dragging, interact by clicking.
-- On mobile, look around via magic window or touch pan, interact by tapping.
-- In Cardboard (3DOF head), use a reticle to interact with objects.
-- In Daydream (3DOF head / 3DOF hand), use the Daydream controller to interact with objects.
-- In Vive (6DOF head / 6DOF hand), use the Vive controller to interact with objects.
+[smus]: http://smus.com/ray-js-cross-device-3d-input
+
+Ray.js depends on THREE.js. You register interactive objects with Ray.js and
+subscribe to events on those objects. Events include:
+
+- `action`: an object is activated (eg. clicked)
+- `release`: an object is deactivated (eg. finger lifted)
+- `cancel`: something stops activation (eg. you mouse-scroll to look around)
+- `select`: an object is selected (eg. hovered on, looked at)
+- `deselect`: an object is no longer selected (eg. blurred, looked away from)
 
 
 ## Usage
@@ -34,9 +42,14 @@ How to register objects that can be interacted with:
     input.add(object);
 
     // Register a callback whenever an object is acted on.
-    input.on('action', (opt_object) => {
-      // Reports an action, regardless of whether this specific object was
-      // selected at the time.
+    input.on('action', (opt_mesh) => {
+      // Called when an object was activated. If there is a selected object,
+      // opt_mesh is that object.
+    });
+
+    // Register a callback when an object is selected.
+    input.on('select', (mesh) => {
+      // Called when an object was selected.
     });
 
 How to unregister objects so that they can't be interacted with:

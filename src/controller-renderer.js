@@ -1,3 +1,8 @@
+/**
+ * TODO(smus): Finish this class, or potentially remove it. Rendering
+ * controllers is potentially something that should be handled by another
+ * library.
+ */
 const ControllerTypes = {
   NONE: 0,
   DAYDREAM: 1,
