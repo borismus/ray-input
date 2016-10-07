@@ -107,6 +107,12 @@ export default class RayInput extends EventEmitter {
         // Vive, origin depends on the position of the controller.
         // TODO(smus)...
         var pose = this.controller.getGamepadPose();
+
+        // Check that the pose is valid.
+        if (!pose.orientation || !pose.position) {
+          console.warn('Invalid gamepad pose. Can\'t update ray.');
+          break;
+        }
         let orientation = new THREE.Quaternion().fromArray(pose.orientation);
         let position = new THREE.Vector3().fromArray(pose.position);
 
