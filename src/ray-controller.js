@@ -45,7 +45,6 @@ export default class RayController extends EventEmitter {
 
     // Gamepad events.
     this.gamepad = null;
-    window.addEventListener('gamepadconnected', this.onGamepadConnected_.bind(this));
 
     // VR Events.
     if (!navigator.getVRDisplays) {
@@ -213,11 +212,6 @@ export default class RayController extends EventEmitter {
     this.isDragging = false;
   }
 
-  onGamepadConnected_(e) {
-    var gamepad = navigator.getGamepads()[e.gamepad.index];
-    // TODO: Only care about gamepads that support motion control.
-  }
-
   onVRDisplayPresentChange_(e) {
     console.log('onVRDisplayPresentChange_', e);
   }
@@ -226,6 +220,11 @@ export default class RayController extends EventEmitter {
    * Gets the first VR-enabled gamepad.
    */
   getVRGamepad_() {
+    // If there's no gamepad API, there's no gamepad.
+    if (!navigator.getGamepads) {
+      return null;
+    }
+
     var gamepads = navigator.getGamepads();
     for (var i = 0; i < gamepads.length; ++i) {
       var gamepad = gamepads[i];
