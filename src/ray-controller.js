@@ -54,7 +54,6 @@ export default class RayController extends EventEmitter {
         this.vrDisplay = displays[0];
       });
     }
-    window.addEventListener('vrdisplaypresentchange', this.onVRDisplayPresentChange_.bind(this));
   }
 
   getInteractionMode() {
@@ -210,10 +209,6 @@ export default class RayController extends EventEmitter {
     }
     this.dragDistance = 0;
     this.isDragging = false;
-  }
-
-  onVRDisplayPresentChange_(e) {
-    console.log('onVRDisplayPresentChange_', e);
   }
 
   /**

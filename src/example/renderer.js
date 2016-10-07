@@ -22,9 +22,6 @@ export default class MenuRenderer {
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
-    renderer.shadowMap.enabled = true;
 
     var effect = new THREE.VREffect(renderer);
     var controls = new THREE.VRControls(camera);
@@ -54,8 +51,12 @@ export default class MenuRenderer {
     this.renderer = renderer;
 
     // Add a small fake menu to interact with.
-    var menu = this.createMenu_()
+    var menu = this.createMenu_();
     scene.add(menu);
+
+    // Add a floor.
+    var floor = this.createFloor_();
+    scene.add(floor);
 
     menu.children.forEach(function(menuItem) {
       console.log('menuItem', menuItem);
@@ -124,5 +125,32 @@ export default class MenuRenderer {
     var cube = new THREE.Mesh(geometry, material);
 
     return cube;
+  }
+
+  createFloor_() {
+    var boxSize = 10;
+    var loader = new THREE.TextureLoader();
+    loader.load('img/box.png', onTextureLoaded);
+    var out = new THREE.Object3D();
+
+    function onTextureLoaded(texture) {
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(boxSize, boxSize);
+
+      var geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+      var material = new THREE.MeshBasicMaterial({
+        map: texture,
+        color: 0x015500,
+        side: THREE.BackSide
+      });
+
+      // Align the skybox to the floor (which is at y=0).
+      let skybox = new THREE.Mesh(geometry, material);
+      skybox.position.y = boxSize/2;
+
+      out.add(skybox);
+    }
+    return out;
   }
 }
