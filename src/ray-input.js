@@ -51,9 +51,9 @@ export default class RayInput extends EventEmitter {
       case InteractionModes.MOUSE:
         // Desktop mouse mode, mouse coordinates are what matters.
         this.renderer.setPointer(this.pointerNdc);
-        // Hide the ray, show the reticle.
+        // Hide the ray and reticle.
         this.renderer.setRayVisibility(false);
-        this.renderer.setReticleVisibility(true);
+        this.renderer.setReticleVisibility(false);
         break;
 
       case InteractionModes.TOUCH:
@@ -61,9 +61,9 @@ export default class RayInput extends EventEmitter {
         // hide the reticle.
         this.renderer.setPointer(this.pointerNdc);
 
-        // Hide the ray and the reticle.
+        // Hide the ray and show the reticle.
         this.renderer.setRayVisibility(false);
-        this.renderer.setReticleVisibility(false);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_0DOF:
