@@ -62,17 +62,17 @@ export default class RayInput extends EventEmitter {
         this.renderer.setReticleVisibility(false);
         break;
 
-      case InteractionModes.CARDBOARD:
+      case InteractionModes.VR_0DOF:
         // Cardboard mode, we're dealing with a gaze reticle.
         this.renderer.setPosition(this.camera.position);
         this.renderer.setOrientation(this.camera.quaternion);
         break;
 
-      case InteractionModes.DAYDREAM:
+      case InteractionModes.VR_3DOF:
         // Daydream, our origin is slightly off (depending on handedness).
         // But we should be using the orientation from the gamepad.
         // TODO(smus): Implement the real arm model.
-        let pose = this.controller.getGamepadPose();
+        var pose = this.controller.getGamepadPose();
 
         // Debug only: use camera as input controller.
         //let controllerOrientation = this.camera.quaternion;
@@ -103,9 +103,15 @@ export default class RayInput extends EventEmitter {
         this.renderer.setRayVisibility(true);
         break;
 
-      case InteractionModes.VIVE:
+      case InteractionModes.VR_6DOF:
         // Vive, origin depends on the position of the controller.
         // TODO(smus)...
+        var pose = this.controller.getGamepadPose();
+        let orientation = new THREE.Quaternion().fromArray(pose.orientation);
+        let position = new THREE.Vector3().fromArray(pose.position);
+
+        this.renderer.setOrientation(orientation);
+        this.renderer.setPosition(position);
 
     }
     this.renderer.update();

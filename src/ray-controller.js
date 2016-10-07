@@ -65,14 +65,14 @@ export default class RayController extends EventEmitter {
     var gamepad = this.getVRGamepad_();
 
     if (gamepad) {
+      let pose = gamepad.pose;
       // If there's a gamepad connected, determine if it's Daydream or a Vive.
-      if (gamepad.id == 'Daydream Controller') {
-        return InteractionModes.DAYDREAM;
+      if (pose.hasPosition) {
+        return InteractionModes.VR_6DOF;
       }
 
-      // TODO: Verify the actual ID.
-      if (gamepad.id == 'Vive Controller') {
-        return InteractionModes.VIVE;
+      if (pose.hasOrientation) {
+        return InteractionModes.VR_3DOF;
       }
 
     } else {
@@ -81,7 +81,7 @@ export default class RayController extends EventEmitter {
         // Either Cardboard or magic window, depending on whether we are
         // presenting.
         if (this.vrDisplay && this.vrDisplay.isPresenting) {
-          return InteractionModes.CARDBOARD;
+          return InteractionModes.VR_0DOF;
         } else {
           return InteractionModes.TOUCH;
         }
@@ -104,7 +104,8 @@ export default class RayController extends EventEmitter {
   }
 
   update() {
-    if (this.getInteractionMode() == InteractionModes.DAYDREAM) {
+    let mode = this.getInteractionMode();
+    if (mode == InteractionModes.VR_3DOF || mode == InteractionModes.VR_6DOF) {
       // If we're dealing with a gamepad, check every animation frame for a
       // pressed action.
       let isGamepadPressed = this.getGamepadButtonPressed_();

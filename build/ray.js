@@ -512,10 +512,10 @@ class RayRenderer extends EventEmitter {
 var InteractionModes = {
   MOUSE: 1,
   TOUCH: 2,
-  CARDBOARD: 3,
-  DAYDREAM: 4,
-  VIVE: 5
-}
+  VR_0DOF: 3,
+  VR_3DOF: 4,
+  VR_6DOF: 5
+};
 
 const DRAG_DISTANCE_PX = 10;
 
@@ -580,14 +580,14 @@ class RayController extends EventEmitter {
     var gamepad = this.getVRGamepad_();
 
     if (gamepad) {
+      let pose = gamepad.pose;
       // If there's a gamepad connected, determine if it's Daydream or a Vive.
-      if (gamepad.id == 'Daydream Controller') {
-        return InteractionModes.DAYDREAM;
+      if (pose.hasPosition) {
+        return InteractionModes.VR_6DOF;
       }
 
-      // TODO: Verify the actual ID.
-      if (gamepad.id == 'Vive Controller') {
-        return InteractionModes.VIVE;
+      if (pose.hasOrientation) {
+        return InteractionModes.VR_3DOF;
       }
 
     } else {
@@ -596,7 +596,7 @@ class RayController extends EventEmitter {
         // Either Cardboard or magic window, depending on whether we are
         // presenting.
         if (this.vrDisplay && this.vrDisplay.isPresenting) {
-          return InteractionModes.CARDBOARD;
+          return InteractionModes.VR_0DOF;
         } else {
           return InteractionModes.TOUCH;
         }
@@ -619,7 +619,8 @@ class RayController extends EventEmitter {
   }
 
   update() {
-    if (this.getInteractionMode() == InteractionModes.DAYDREAM) {
+    let mode = this.getInteractionMode();
+    if (mode == InteractionModes.VR_3DOF || mode == InteractionModes.VR_6DOF) {
       // If we're dealing with a gamepad, check every animation frame for a
       // pressed action.
       let isGamepadPressed = this.getGamepadButtonPressed_();
@@ -812,13 +813,13 @@ class RayInput$1 extends EventEmitter {
         this.renderer.setReticleVisibility(false);
         break;
 
-      case InteractionModes.CARDBOARD:
+      case InteractionModes.VR_0DOF:
         // Cardboard mode, we're dealing with a gaze reticle.
         this.renderer.setPosition(this.camera.position);
         this.renderer.setOrientation(this.camera.quaternion);
         break;
 
-      case InteractionModes.DAYDREAM:
+      case InteractionModes.VR_3DOF:
         // Daydream, our origin is slightly off (depending on handedness).
         // But we should be using the orientation from the gamepad.
         // TODO(smus): Implement the real arm model.
@@ -853,9 +854,15 @@ class RayInput$1 extends EventEmitter {
         this.renderer.setRayVisibility(true);
         break;
 
-      case InteractionModes.VIVE:
+      case InteractionModes.VR_6DOF:
         // Vive, origin depends on the position of the controller.
         // TODO(smus)...
+        let pose = this.controller.getGamepadPose();
+        let orientation = new THREE.Quaternion().fromArray(pose.orientation);
+        let position = new THREE.Vector3().fromArray(pose.position);
+
+        this.renderer.setOrientation(orientation);
+        this.renderer.setPosition(position);
 
     }
     this.renderer.update();
