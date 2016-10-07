@@ -51,22 +51,29 @@ export default class RayInput extends EventEmitter {
       case InteractionModes.MOUSE:
         // Desktop mouse mode, mouse coordinates are what matters.
         this.renderer.setPointer(this.pointerNdc);
-        // TODO: Debug only.
-        this.renderer.setRayVisibility(true);
+        // Hide the ray, show the reticle.
+        this.renderer.setRayVisibility(false);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.TOUCH:
         // Mobile magic window mode. Touch coordinates matter, but we want to
         // hide the reticle.
         this.renderer.setPointer(this.pointerNdc);
+
+        // Hide the ray and the reticle.
+        this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(false);
         break;
 
       case InteractionModes.VR_0DOF:
         // Cardboard mode, we're dealing with a gaze reticle.
-        this.renderer.setRayVisibility(false);
         this.renderer.setPosition(this.camera.position);
         this.renderer.setOrientation(this.camera.quaternion);
+
+        // Reticle only.
+        this.renderer.setRayVisibility(false);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_3DOF:
@@ -100,8 +107,9 @@ export default class RayInput extends EventEmitter {
         this.renderer.setOrientation(modelPose.orientation);
         //this.renderer.setOrientation(controllerOrientation);
 
-        // Make the ray and controller visible.
+        // Show ray and reticle.
         this.renderer.setRayVisibility(true);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_6DOF:
@@ -120,6 +128,13 @@ export default class RayInput extends EventEmitter {
         this.renderer.setOrientation(orientation);
         this.renderer.setPosition(position);
 
+        // Show ray and reticle.
+        this.renderer.setRayVisibility(true);
+        this.renderer.setReticleVisibility(true);
+        break;
+
+      default:
+        console.error('Unknown interaction mode.');
     }
     this.renderer.update();
     this.controller.update();
