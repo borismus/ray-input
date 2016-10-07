@@ -64,6 +64,7 @@ export default class RayInput extends EventEmitter {
 
       case InteractionModes.VR_0DOF:
         // Cardboard mode, we're dealing with a gaze reticle.
+        this.renderer.setRayVisibility(false);
         this.renderer.setPosition(this.camera.position);
         this.renderer.setOrientation(this.camera.quaternion);
         break;
