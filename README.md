@@ -72,4 +72,5 @@ Open to pull requests that allow customization. Ideas include:
 
 - Adjust the length of the ray.
 - Specify the shape of the reticle.
-- Support for multiple controllers.
+- Support for multiple controllers (especially 6DOF).
+- Support for left handed Daydream arm models.

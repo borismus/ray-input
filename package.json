@@ -1,6 +1,6 @@
 {
   "name": "ray",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard, Daydream and Vive.",
   "main": "build/ray.js",
   "scripts": {
