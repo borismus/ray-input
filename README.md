@@ -1,14 +1,14 @@
-Ray.js: generalized VR input
-============================
+Ray Input: default WebVR interaction
+====================================
 
-Ray.js is a JavaScript library that provides an input abstraction for
+Ray Input is a JavaScript library that provides an input abstraction for
 interacting with 3D VR content in the browser. It supports a variety of
 environments: desktop, mobile, and VR. In VR mode, behavior depends on if
 there's a motion controller, and whether the controller has positional tracking
 in addition to orientation tracking. For a higher level description of the
-library, see [Cross device 3D input][smus].
+library, see [sane defaults for VR input][smus].
 
-[smus]: http://smus.com/ray-js-cross-device-3d-input
+[smus]: http://smus.com/ray-sane-defaults-vr-input
 
 Ray.js depends on THREE.js. You register interactive objects with Ray.js and
 subscribe to events on those objects. Events include:
@@ -24,7 +24,7 @@ subscribe to events on those objects. Events include:
 
 Get the module from npm:
 
-    npm install ray.js
+    npm install ray-input
 
 Then, in your code, import the ES6 module (require and standalone mode should
 also work):
@@ -65,7 +65,11 @@ How to set basic attributes on the input system:.
     // Update the input system in a game loop.
     input.update();
 
-How to customize the ray:
 
-    // Forces the ray to be visible.
-    input.setRayVisible(true);
+## Future
+
+Open to pull requests that allow customization. Ideas include:
+
+- Adjust the length of the ray.
+- Specify the shape of the reticle.
+- Support for multiple controllers.
