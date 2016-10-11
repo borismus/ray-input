@@ -16,19 +16,25 @@
 import MenuRenderer from './renderer.js';
 
 let renderer;
+let vrDisplay;
 
 function onLoad() {
   renderer = new MenuRenderer();
 
   window.addEventListener('resize', () => { renderer.resize() });
 
-  render();
+  navigator.getVRDisplays().then(function(displays) {
+    if (displays.length > 0) {
+      vrDisplay = displays[0];
+      vrDisplay.requestAnimationFrame(render);
+    }
+  });
 }
 
 function render() {
   renderer.render();
 
-  requestAnimationFrame(render);
+  vrDisplay.requestAnimationFrame(render);
 }
 
 window.addEventListener('load', onLoad);
