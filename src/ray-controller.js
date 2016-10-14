@@ -47,6 +47,9 @@ export default class RayController extends EventEmitter {
     window.addEventListener('touchmove', this.onTouchMove_.bind(this));
     window.addEventListener('touchend', this.onTouchEnd_.bind(this));
 
+    // Listen to mouse events, set to true on first touch event
+    this.isTouchSupported = false;
+
     // The position of the pointer.
     this.pointer = new THREE.Vector2();
     // The previous position of the pointer.
@@ -57,6 +60,8 @@ export default class RayController extends EventEmitter {
     this.dragDistance = 0;
     // Are we dragging or not.
     this.isDragging = false;
+    // Is pointer active or not.
+    this.isTouchActive = false;
 
     // Gamepad events.
     this.gamepad = null;
@@ -112,6 +117,14 @@ export default class RayController extends EventEmitter {
     return gamepad.pose;
   }
 
+  /**
+   * Get if there is an active touch event going on.
+   * Only relevant on touch devices
+   */
+  getIsTouchActive() {
+    return this.isTouchActive;
+  }
+
   setSize(size) {
     this.size = size;
   }
@@ -148,26 +161,34 @@ export default class RayController extends EventEmitter {
   }
 
   onMouseDown_(e) {
-    this.startDragging_(e);
-    this.emit('action');
+    if(!this.isTouchSupported) {
+      this.startDragging_(e);
+      this.emit('action');
+    }
   }
 
   onMouseMove_(e) {
-    this.updatePointer_(e);
-    this.updateDragDistance_();
-
-    this.emit('pointermove', this.pointerNdc);
+    if(!this.isTouchSupported) {
+      this.updatePointer_(e);
+      this.updateDragDistance_();
+      this.emit('pointermove', this.pointerNdc);
+    }
   }
 
   onMouseUp_(e) {
-    this.endDragging_();
+    if(!this.isTouchSupported) {
+      this.endDragging_();
+    }
   }
 
   onTouchStart_(e) {
+    this.isTouchSupported = true;
+
     var t = e.touches[0];
     this.startDragging_(t);
     this.updateTouchPointer_(e);
 
+    this.isTouchActive = true;
     this.emit('pointermove', this.pointerNdc);
     this.emit('action');
   }
@@ -178,6 +199,7 @@ export default class RayController extends EventEmitter {
   }
 
   onTouchEnd_(e) {
+    this.isTouchActive = false;
     this.endDragging_();
   }
 

@@ -69,6 +69,9 @@ export default class RayInput extends EventEmitter {
         // Hide the ray and reticle.
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(false);
+
+        // In mouse mode ray renderer is always active 
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.TOUCH:
@@ -76,9 +79,12 @@ export default class RayInput extends EventEmitter {
         // hide the reticle.
         this.renderer.setPointer(this.pointerNdc);
 
-        // Hide the ray and show the reticle.
+        // Hide the ray and the reticle.
         this.renderer.setRayVisibility(false);
-        this.renderer.setReticleVisibility(true);
+        this.renderer.setReticleVisibility(false);
+
+        // In touch mode the ray renderer is only active on touch
+        this.renderer.setActive(this.controller.getIsTouchActive());
         break;
 
       case InteractionModes.VR_0DOF:
@@ -89,6 +95,9 @@ export default class RayInput extends EventEmitter {
         // Reticle only.
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(true);
+
+        // Ray renderer always active
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.VR_3DOF:
@@ -125,6 +134,9 @@ export default class RayInput extends EventEmitter {
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
+
+        // Ray renderer always active
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.VR_6DOF:
@@ -146,6 +158,9 @@ export default class RayInput extends EventEmitter {
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
+        
+        // Ray renderer always active
+        this.renderer.setActive(true);
         break;
 
       default:
