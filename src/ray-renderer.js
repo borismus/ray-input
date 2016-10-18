@@ -142,7 +142,7 @@ export default class RayRenderer extends EventEmitter {
         }
       }
     } else {
-      // Ray not active, deselect selected meshes
+      // Ray not active, deselect selected meshes.
       for (let id in this.selected) {
         let handlers = this.handlers[id];
         let mesh = this.meshes[id];

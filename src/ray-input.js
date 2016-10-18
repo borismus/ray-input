@@ -40,7 +40,7 @@ export default class RayInput extends EventEmitter {
     this.renderer.on('select', (mesh) => { this.emit('select', mesh) });
     this.renderer.on('deselect', (mesh) => { this.emit('deselect', mesh) });
 
-    // By default, put the pointer offscreen
+    // By default, put the pointer offscreen.
     this.pointerNdc = new THREE.Vector2(1, 1);
 
     // Event handlers.
@@ -70,7 +70,7 @@ export default class RayInput extends EventEmitter {
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(false);
 
-        // In mouse mode ray renderer is always active 
+        // In mouse mode ray renderer is always active.
         this.renderer.setActive(true);
         break;
 
@@ -83,7 +83,7 @@ export default class RayInput extends EventEmitter {
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(false);
 
-        // In touch mode the ray renderer is only active on touch
+        // In touch mode the ray renderer is only active on touch.
         this.renderer.setActive(this.controller.getIsTouchActive());
         break;
 
@@ -96,7 +96,7 @@ export default class RayInput extends EventEmitter {
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(true);
 
-        // Ray renderer always active
+        // Ray renderer always active.
         this.renderer.setActive(true);
         break;
 
@@ -135,7 +135,7 @@ export default class RayInput extends EventEmitter {
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
 
-        // Ray renderer always active
+        // Ray renderer always active.
         this.renderer.setActive(true);
         break;
 
@@ -158,8 +158,8 @@ export default class RayInput extends EventEmitter {
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
-        
-        // Ray renderer always active
+
+        // Ray renderer always active.
         this.renderer.setActive(true);
         break;
 

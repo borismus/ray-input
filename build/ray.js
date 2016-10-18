@@ -354,35 +354,49 @@ class RayRenderer extends EventEmitter {
   }
 
   update() {
-    // Do the raycasting and issue various events as needed.
-    for (var id in this.meshes) {
-      var mesh = this.meshes[id];
-      var handlers = this.handlers[id];
-      var intersects = this.raycaster.intersectObject(mesh, true);
-      var isIntersected = (intersects.length > 0);
-      var isSelected = this.selected[id];
-
-      // If it's newly selected, send onSelect.
-      if (isIntersected && !isSelected) {
-        this.selected[id] = true;
-        if (handlers.onSelect) {
-          handlers.onSelect(mesh);
+    if(this.isActive){
+      // Do the raycasting and issue various events as needed.
+      for (let id in this.meshes) {
+        let mesh = this.meshes[id];
+        let handlers = this.handlers[id];
+        let intersects = this.raycaster.intersectObject(mesh, true);
+        let isIntersected = (intersects.length > 0);
+        let isSelected = this.selected[id];
+        // If it's newly selected, send onSelect.
+        if (isIntersected && !isSelected) {
+          this.selected[id] = true;
+          if (handlers.onSelect) {
+            handlers.onSelect(mesh);
+          }
+          this.emit('select', mesh);
         }
-        this.emit('select', mesh);
-      }
 
-      // If it's no longer selected, send onDeselect.
-      if (!isIntersected && isSelected) {
+        // If it's no longer intersected, send onDeselect.
+        if (!isIntersected && isSelected) {
+          delete this.selected[id];
+          if (handlers.onDeselect) {
+            handlers.onDeselect(mesh);
+          }
+          this.moveReticle_(null);
+          this.emit('deselect', mesh);
+        }
+
+        if (isIntersected) {
+          this.moveReticle_(intersects);
+        }
+      }
+    } else {
+      // Ray not active, deselect selected meshes.
+      for (let id in this.selected) {
+        let handlers = this.handlers[id];
+        let mesh = this.meshes[id];
+
         delete this.selected[id];
         if (handlers.onDeselect) {
           handlers.onDeselect(mesh);
         }
         this.moveReticle_(null);
         this.emit('deselect', mesh);
-      }
-
-      if (isIntersected) {
-        this.moveReticle_(intersects);
       }
     }
   }
@@ -472,6 +486,7 @@ class RayRenderer extends EventEmitter {
    */
   setActive(isActive) {
     // TODO(smus): Show the ray or reticle adjust in response.
+    this.isActive = isActive;
   }
 
   updateRaycaster_() {
@@ -622,6 +637,9 @@ class RayController extends EventEmitter {
     window.addEventListener('touchmove', this.onTouchMove_.bind(this));
     window.addEventListener('touchend', this.onTouchEnd_.bind(this));
 
+    // Listen to mouse events, set to true on first touch event.
+    this.isTouchSupported = false;
+
     // The position of the pointer.
     this.pointer = new THREE.Vector2();
     // The previous position of the pointer.
@@ -632,6 +650,8 @@ class RayController extends EventEmitter {
     this.dragDistance = 0;
     // Are we dragging or not.
     this.isDragging = false;
+    // Is pointer active or not.
+    this.isTouchActive = false;
 
     // Gamepad events.
     this.gamepad = null;
@@ -687,6 +707,14 @@ class RayController extends EventEmitter {
     return gamepad.pose;
   }
 
+  /**
+   * Get if there is an active touch event going on.
+   * Only relevant on touch devices
+   */
+  getIsTouchActive() {
+    return this.isTouchActive;
+  }
+
   setSize(size) {
     this.size = size;
   }
@@ -723,26 +751,34 @@ class RayController extends EventEmitter {
   }
 
   onMouseDown_(e) {
-    this.startDragging_(e);
-    this.emit('action');
+    if(!this.isTouchSupported) {
+      this.startDragging_(e);
+      this.emit('action');
+    }
   }
 
   onMouseMove_(e) {
-    this.updatePointer_(e);
-    this.updateDragDistance_();
-
-    this.emit('pointermove', this.pointerNdc);
+    if(!this.isTouchSupported) {
+      this.updatePointer_(e);
+      this.updateDragDistance_();
+      this.emit('pointermove', this.pointerNdc);
+    }
   }
 
   onMouseUp_(e) {
-    this.endDragging_();
+    if(!this.isTouchSupported) {
+      this.endDragging_();
+    }
   }
 
   onTouchStart_(e) {
+    this.isTouchSupported = true;
+
     var t = e.touches[0];
     this.startDragging_(t);
     this.updateTouchPointer_(e);
 
+    this.isTouchActive = true;
     this.emit('pointermove', this.pointerNdc);
     this.emit('action');
   }
@@ -753,6 +789,7 @@ class RayController extends EventEmitter {
   }
 
   onTouchEnd_(e) {
+    this.isTouchActive = false;
     this.endDragging_();
   }
 
@@ -860,7 +897,7 @@ class RayInput$1 extends EventEmitter {
     this.renderer.on('select', (mesh) => { this.emit('select', mesh) });
     this.renderer.on('deselect', (mesh) => { this.emit('deselect', mesh) });
 
-    // By default, put the pointer offscreen
+    // By default, put the pointer offscreen.
     this.pointerNdc = new THREE.Vector2(1, 1);
 
     // Event handlers.
@@ -889,6 +926,9 @@ class RayInput$1 extends EventEmitter {
         // Hide the ray and reticle.
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(false);
+
+        // In mouse mode ray renderer is always active.
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.TOUCH:
@@ -896,9 +936,12 @@ class RayInput$1 extends EventEmitter {
         // hide the reticle.
         this.renderer.setPointer(this.pointerNdc);
 
-        // Hide the ray and show the reticle.
+        // Hide the ray and the reticle.
         this.renderer.setRayVisibility(false);
-        this.renderer.setReticleVisibility(true);
+        this.renderer.setReticleVisibility(false);
+
+        // In touch mode the ray renderer is only active on touch.
+        this.renderer.setActive(this.controller.getIsTouchActive());
         break;
 
       case InteractionModes.VR_0DOF:
@@ -909,6 +952,9 @@ class RayInput$1 extends EventEmitter {
         // Reticle only.
         this.renderer.setRayVisibility(false);
         this.renderer.setReticleVisibility(true);
+
+        // Ray renderer always active.
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.VR_3DOF:
@@ -945,6 +991,9 @@ class RayInput$1 extends EventEmitter {
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
+
+        // Ray renderer always active.
+        this.renderer.setActive(true);
         break;
 
       case InteractionModes.VR_6DOF:
@@ -966,6 +1015,9 @@ class RayInput$1 extends EventEmitter {
         // Show ray and reticle.
         this.renderer.setRayVisibility(true);
         this.renderer.setReticleVisibility(true);
+
+        // Ray renderer always active.
+        this.renderer.setActive(true);
         break;
 
       default:

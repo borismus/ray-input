@@ -47,7 +47,7 @@ export default class RayController extends EventEmitter {
     window.addEventListener('touchmove', this.onTouchMove_.bind(this));
     window.addEventListener('touchend', this.onTouchEnd_.bind(this));
 
-    // Listen to mouse events, set to true on first touch event
+    // Listen to mouse events, set to true on first touch event.
     this.isTouchSupported = false;
 
     // The position of the pointer.
