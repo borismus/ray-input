@@ -15,7 +15,7 @@
 
 import dat from 'dat-gui';
 import DaydreamSimulator from './daydream-simulator';
-import DaydreamArmModel from '../daydream-arm-model';
+import OrientationArmModel from '../orientation-arm-model';
 
 var simulator;
 var model;
@@ -25,7 +25,7 @@ var headPosition = new THREE.Vector3(0, 1.6, 0);
 var params;
 
 function onLoad() {
-  model = new DaydreamArmModel();
+  model = new OrientationArmModel();
   simulator = new DaydreamSimulator(model);
 
   buildGui();

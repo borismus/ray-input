@@ -4,8 +4,8 @@
   "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard, Daydream and Vive.",
   "main": "build/ray.js",
   "scripts": {
+    "start": "watchify -vdt [ babelify --presets [ es2015 ] ] src/example/main.js -o build/example.js",
     "build": "rollup -c",
-    "watch": "watchify -vdt [ babelify --presets [ es2015 ] ] src/example/main.js -o build/example.js",
     "watch-simulator": "watchify -vdt [ babelify --presets [ es2015 ] ] src/simulator/main.js -o build/simulator.js"
   },
   "author": "Boris Smus",

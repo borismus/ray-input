@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import DaydreamArmModel from './daydream-arm-model'
+import OrientationArmModel from './orientation-arm-model'
 import EventEmitter from 'eventemitter3'
 import RayRenderer from './ray-renderer'
 import RayController from './ray-controller'
@@ -31,7 +31,7 @@ export default class RayInput extends EventEmitter {
     this.controller = new RayController();
 
     // Arm model needed to transform controller orientation into proper pose.
-    this.armModel = new DaydreamArmModel();
+    this.armModel = new OrientationArmModel();
 
     this.controller.on('action', this.onAction_.bind(this));
     this.controller.on('release', this.onRelease_.bind(this));

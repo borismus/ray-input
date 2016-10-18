@@ -29,7 +29,7 @@ const MIN_ANGULAR_SPEED = 0.61; // 35 degrees per second (in radians).
  *
  * Get the model's pose using getPose().
  */
-export default class DaydreamArmModel {
+export default class OrientationArmModel {
   constructor() {
     this.isLeftHanded = false;
 

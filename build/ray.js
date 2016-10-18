@@ -4,6 +4,21 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var EventEmitter = _interopDefault(require('eventemitter3'));
 
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 const HEAD_ELBOW_OFFSET = new THREE.Vector3(0.155, -0.465, -0.15);
 const ELBOW_WRIST_OFFSET = new THREE.Vector3(0, 0, -0.25);
 const WRIST_CONTROLLER_OFFSET = new THREE.Vector3(0, 0, 0.05);
@@ -20,7 +35,7 @@ const MIN_ANGULAR_SPEED = 0.61; // 35 degrees per second (in radians).
  *
  * Get the model's pose using getPose().
  */
-class DaydreamArmModel {
+class OrientationArmModel {
   constructor() {
     this.isLeftHanded = false;
 
@@ -205,6 +220,21 @@ class DaydreamArmModel {
   }
 }
 
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 function isMobile() {
   var check = false;
   (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
@@ -214,6 +244,21 @@ function isMobile() {
 function base64(mimeType, base64) {
   return 'data:' + mimeType + ';base64,' + base64;
 }
+
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 const RETICLE_DISTANCE = 3;
 const INNER_RADIUS = 0.02;
@@ -509,6 +554,21 @@ class RayRenderer extends EventEmitter {
   }
 }
 
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 var InteractionModes = {
   MOUSE: 1,
   TOUCH: 2,
@@ -516,6 +576,21 @@ var InteractionModes = {
   VR_3DOF: 4,
   VR_6DOF: 5
 };
+
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 const DRAG_DISTANCE_PX = 10;
 
@@ -560,7 +635,6 @@ class RayController extends EventEmitter {
 
     // Gamepad events.
     this.gamepad = null;
-    window.addEventListener('gamepadconnected', this.onGamepadConnected_.bind(this));
 
     // VR Events.
     if (!navigator.getVRDisplays) {
@@ -570,7 +644,6 @@ class RayController extends EventEmitter {
         this.vrDisplay = displays[0];
       });
     }
-    window.addEventListener('vrdisplaypresentchange', this.onVRDisplayPresentChange_.bind(this));
   }
 
   getInteractionMode() {
@@ -728,19 +801,15 @@ class RayController extends EventEmitter {
     this.isDragging = false;
   }
 
-  onGamepadConnected_(e) {
-    var gamepad = navigator.getGamepads()[e.gamepad.index];
-    // TODO: Only care about gamepads that support motion control.
-  }
-
-  onVRDisplayPresentChange_(e) {
-    console.log('onVRDisplayPresentChange_', e);
-  }
-
   /**
    * Gets the first VR-enabled gamepad.
    */
   getVRGamepad_() {
+    // If there's no gamepad API, there's no gamepad.
+    if (!navigator.getGamepads) {
+      return null;
+    }
+
     var gamepads = navigator.getGamepads();
     for (var i = 0; i < gamepads.length; ++i) {
       var gamepad = gamepads[i];
@@ -755,6 +824,21 @@ class RayController extends EventEmitter {
   }
 }
 
+/*
+ * Copyright 2016 Google Inc. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * API wrapper for the input library.
  */
@@ -767,7 +851,7 @@ class RayInput$1 extends EventEmitter {
     this.controller = new RayController();
 
     // Arm model needed to transform controller orientation into proper pose.
-    this.armModel = new DaydreamArmModel();
+    this.armModel = new OrientationArmModel();
 
     this.controller.on('action', this.onAction_.bind(this));
     this.controller.on('release', this.onRelease_.bind(this));
@@ -802,28 +886,36 @@ class RayInput$1 extends EventEmitter {
       case InteractionModes.MOUSE:
         // Desktop mouse mode, mouse coordinates are what matters.
         this.renderer.setPointer(this.pointerNdc);
-        // TODO: Debug only.
-        this.renderer.setRayVisibility(true);
+        // Hide the ray and reticle.
+        this.renderer.setRayVisibility(false);
+        this.renderer.setReticleVisibility(false);
         break;
 
       case InteractionModes.TOUCH:
         // Mobile magic window mode. Touch coordinates matter, but we want to
         // hide the reticle.
         this.renderer.setPointer(this.pointerNdc);
-        this.renderer.setReticleVisibility(false);
+
+        // Hide the ray and show the reticle.
+        this.renderer.setRayVisibility(false);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_0DOF:
         // Cardboard mode, we're dealing with a gaze reticle.
         this.renderer.setPosition(this.camera.position);
         this.renderer.setOrientation(this.camera.quaternion);
+
+        // Reticle only.
+        this.renderer.setRayVisibility(false);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_3DOF:
         // Daydream, our origin is slightly off (depending on handedness).
         // But we should be using the orientation from the gamepad.
         // TODO(smus): Implement the real arm model.
-        let pose = this.controller.getGamepadPose();
+        var pose = this.controller.getGamepadPose();
 
         // Debug only: use camera as input controller.
         //let controllerOrientation = this.camera.quaternion;
@@ -850,20 +942,34 @@ class RayInput$1 extends EventEmitter {
         this.renderer.setOrientation(modelPose.orientation);
         //this.renderer.setOrientation(controllerOrientation);
 
-        // Make the ray and controller visible.
+        // Show ray and reticle.
         this.renderer.setRayVisibility(true);
+        this.renderer.setReticleVisibility(true);
         break;
 
       case InteractionModes.VR_6DOF:
         // Vive, origin depends on the position of the controller.
         // TODO(smus)...
-        let pose = this.controller.getGamepadPose();
+        var pose = this.controller.getGamepadPose();
+
+        // Check that the pose is valid.
+        if (!pose.orientation || !pose.position) {
+          console.warn('Invalid gamepad pose. Can\'t update ray.');
+          break;
+        }
         let orientation = new THREE.Quaternion().fromArray(pose.orientation);
         let position = new THREE.Vector3().fromArray(pose.position);
 
         this.renderer.setOrientation(orientation);
         this.renderer.setPosition(position);
 
+        // Show ray and reticle.
+        this.renderer.setRayVisibility(true);
+        this.renderer.setReticleVisibility(true);
+        break;
+
+      default:
+        console.error('Unknown interaction mode.');
     }
     this.renderer.update();
     this.controller.update();
