@@ -110,35 +110,49 @@ export default class RayRenderer extends EventEmitter {
   }
 
   update() {
-    // Do the raycasting and issue various events as needed.
-    for (var id in this.meshes) {
-      var mesh = this.meshes[id];
-      var handlers = this.handlers[id];
-      var intersects = this.raycaster.intersectObject(mesh, true);
-      var isIntersected = (intersects.length > 0);
-      var isSelected = this.selected[id];
-
-      // If it's newly selected, send onSelect.
-      if (isIntersected && !isSelected) {
-        this.selected[id] = true;
-        if (handlers.onSelect) {
-          handlers.onSelect(mesh);
+    if(this.isActive){
+      // Do the raycasting and issue various events as needed.
+      for (let id in this.meshes) {
+        let mesh = this.meshes[id];
+        let handlers = this.handlers[id];
+        let intersects = this.raycaster.intersectObject(mesh, true);
+        let isIntersected = (intersects.length > 0);
+        let isSelected = this.selected[id];
+        // If it's newly selected, send onSelect.
+        if (isIntersected && !isSelected) {
+          this.selected[id] = true;
+          if (handlers.onSelect) {
+            handlers.onSelect(mesh);
+          }
+          this.emit('select', mesh);
         }
-        this.emit('select', mesh);
-      }
 
-      // If it's no longer selected, send onDeselect.
-      if (!isIntersected && isSelected) {
+        // If it's no longer intersected, send onDeselect.
+        if (!isIntersected && isSelected) {
+          delete this.selected[id];
+          if (handlers.onDeselect) {
+            handlers.onDeselect(mesh);
+          }
+          this.moveReticle_(null);
+          this.emit('deselect', mesh);
+        }
+
+        if (isIntersected) {
+          this.moveReticle_(intersects);
+        }
+      }
+    } else {
+      // Ray not active, deselect selected meshes
+      for (let id in this.selected) {
+        let handlers = this.handlers[id];
+        let mesh = this.meshes[id];
+
         delete this.selected[id];
         if (handlers.onDeselect) {
           handlers.onDeselect(mesh);
         }
         this.moveReticle_(null);
         this.emit('deselect', mesh);
-      }
-
-      if (isIntersected) {
-        this.moveReticle_(intersects);
       }
     }
   }
@@ -228,6 +242,7 @@ export default class RayRenderer extends EventEmitter {
    */
   setActive(isActive) {
     // TODO(smus): Show the ray or reticle adjust in response.
+    this.isActive = isActive;
   }
 
   updateRaycaster_() {
