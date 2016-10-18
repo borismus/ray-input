@@ -23,6 +23,5 @@
     "babelify": "^7.3.0",
     "rollup": "^0.36.1",
     "rollup-plugin-uglify": "^1.0.1"
-  },
-  "browserify": { "transform": ["babelify"] }
+  }
 }
