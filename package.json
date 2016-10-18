@@ -2,7 +2,7 @@
   "name": "ray-input",
   "version": "0.1.0",
   "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard, Daydream and Vive.",
-  "main": "build/ray.js",
+  "main": "src/ray-input.js",
   "scripts": {
     "start": "watchify -vdt [ babelify --presets [ es2015 ] ] src/example/main.js -o build/example.js",
     "build": "rollup -c",
@@ -23,5 +23,6 @@
     "babelify": "^7.3.0",
     "rollup": "^0.36.1",
     "rollup-plugin-uglify": "^1.0.1"
-  }
+  },
+  "browserify": { "transform": ["babelify"] }
 }
