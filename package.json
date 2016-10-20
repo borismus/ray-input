@@ -6,7 +6,6 @@
   "scripts": {
     "build": "browserify -vdt [ babelify --presets [ es2015 ] ] src/ray-input.js -o build/ray.js",
     "start": "watchify -vdt [ babelify --presets [ es2015 ] ] src/example/main.js -o build/example.js",
-    "build": "rollup -c",
     "watch-simulator": "watchify -vdt [ babelify --presets [ es2015 ] ] src/simulator/main.js -o build/simulator.js"
   },
   "author": "Boris Smus",
@@ -22,7 +21,5 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.16.0",
     "babelify": "^7.3.0",
-    "rollup": "^0.36.1",
-    "rollup-plugin-uglify": "^1.0.1"
   }
 }
