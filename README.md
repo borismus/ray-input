@@ -8,7 +8,7 @@ there's a motion controller, and whether the controller has positional tracking
 in addition to orientation tracking. For a higher level description of the
 library, see [sane defaults for VR input][smus].
 
-[smus]: http://smus.com/ray-sane-defaults-vr-input
+[smus]: http://smus.com/ray-input-webvr-interaction-patterns/
 
 Ray.js depends on THREE.js. You register interactive objects with Ray.js and
 subscribe to events on those objects. Events include:
