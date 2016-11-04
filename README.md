@@ -26,10 +26,17 @@ Get the module from npm:
 
     npm install ray-input
 
-Then, in your code, import the ES6 module (require and standalone mode should
-also work):
+Then, in your code, import the ES6 module:
 
     import RayInput from 'ray-input'
+
+You can also use require.js:
+
+    require('./ray-input')
+
+Or you can use the script standalone:
+
+    <script src="build/ray.min.js"></script>
 
 ## API
 
