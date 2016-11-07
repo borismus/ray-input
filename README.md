@@ -13,11 +13,11 @@ library, see [sane defaults for VR input][smus].
 Ray.js depends on THREE.js. You register interactive objects with Ray.js and
 subscribe to events on those objects. Events include:
 
-- `action`: an object is activated (eg. clicked)
-- `release`: an object is deactivated (eg. finger lifted)
-- `cancel`: something stops activation (eg. you mouse-scroll to look around)
-- `select`: an object is selected (eg. hovered on, looked at)
-- `deselect`: an object is no longer selected (eg. blurred, looked away from)
+- `raydown`: an object is activated (eg. clicked)
+- `rayup`: an object is deactivated (eg. finger lifted)
+- `raycancel`: something stops activation (eg. you mouse-scroll to look around)
+- `rayover`: an object is selected (eg. hovered on, looked at)
+- `rayout`: an object is no longer selected (eg. blurred, looked away from)
 
 
 ## Usage
@@ -42,20 +42,21 @@ Or you can use the script standalone:
 
 How to instantiate the input library:
 
-    var input = new RayInput();
+    // Here, camera is an instance of THREE.Camera.
+    var input = new RayInput(camera);
 
 How to register objects that can be interacted with:
 
     input.add(object);
 
     // Register a callback whenever an object is acted on.
-    input.on('action', (opt_mesh) => {
+    input.on('raydown', (opt_mesh) => {
       // Called when an object was activated. If there is a selected object,
       // opt_mesh is that object.
     });
 
     // Register a callback when an object is selected.
-    input.on('select', (mesh) => {
+    input.on('rayover', (mesh) => {
       // Called when an object was selected.
     });
 
@@ -81,3 +82,6 @@ Open to pull requests that allow customization. Ideas include:
 - Specify the shape of the reticle.
 - Support for multiple controllers (especially 6DOF).
 - Support for left handed Daydream arm models.
+- Support a mode where only the closest object gets ray events. This has some
+  implications. For example, when ray moves from background to foreground
+  object, the background gets a `rayout`, while the foreground gets a `rayover`.
