@@ -34,8 +34,8 @@ const GRADIENT_IMAGE = base64('image/png', 'iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYA
  * Vive: 6DOF controller via gamepad (and show ray).
  *
  * Emits selection events:
- *     select(mesh): This mesh was selected.
- *     deselect(mesh): This mesh was unselected.
+ *     rayover(mesh): This mesh was selected.
+ *     rayout(mesh): This mesh was unselected.
  */
 export default class RayRenderer extends EventEmitter {
   constructor(camera, opt_params) {
@@ -50,9 +50,6 @@ export default class RayRenderer extends EventEmitter {
 
     // Which objects are currently selected (keyed on id).
     this.selected = {};
-
-    // Event handlers for interactive objects (keyed on id).
-    this.handlers = {};
 
     // The raycaster.
     this.raycaster = new THREE.Raycaster();
@@ -77,16 +74,9 @@ export default class RayRenderer extends EventEmitter {
 
   /**
    * Register an object so that it can be interacted with.
-   * @param {Object} handlers The event handlers to process for selection,
-   * deselection, and activation.
    */
-  add(object, opt_handlers) {
+  add(object) {
     this.meshes[object.id] = object;
-
-    // TODO(smus): Validate the handlers, making sure only valid handlers are
-    // provided (ie. onSelect, onDeselect, onAction, etc).
-    var handlers = opt_handlers || {};
-    this.handlers[object.id] = handlers;
   }
 
   /**
@@ -97,44 +87,36 @@ export default class RayRenderer extends EventEmitter {
     if (!this.meshes[id]) {
       // If there's no existing mesh, we can't remove it.
       delete this.meshes[id];
-      delete this.handlers[id];
     }
     // If the object is currently selected, remove it.
     if (this.selected[id]) {
-      var handlers = this.handlers[id]
-      if (handlers.onDeselect) {
-        handlers.onDeselect(object);
-      }
       delete this.selected[object.id];
     }
   }
 
   update() {
-    if(this.isActive){
+    if (this.isActive) {
       // Do the raycasting and issue various events as needed.
       for (let id in this.meshes) {
         let mesh = this.meshes[id];
-        let handlers = this.handlers[id];
         let intersects = this.raycaster.intersectObject(mesh, true);
+        if (intersects.length > 1) {
+          console.warn('Unexpected: multiple meshes intersected.');
+        }
         let isIntersected = (intersects.length > 0);
         let isSelected = this.selected[id];
-        // If it's newly selected, send onSelect.
+
+        // If it's newly selected, send rayover.
         if (isIntersected && !isSelected) {
           this.selected[id] = true;
-          if (handlers.onSelect) {
-            handlers.onSelect(mesh);
-          }
-          this.emit('select', mesh);
+          this.emit('rayover', mesh);
         }
 
-        // If it's no longer intersected, send onDeselect.
+        // If it's no longer intersected, send rayout.
         if (!isIntersected && isSelected) {
           delete this.selected[id];
-          if (handlers.onDeselect) {
-            handlers.onDeselect(mesh);
-          }
           this.moveReticle_(null);
-          this.emit('deselect', mesh);
+          this.emit('rayout', mesh);
         }
 
         if (isIntersected) {
@@ -142,17 +124,13 @@ export default class RayRenderer extends EventEmitter {
         }
       }
     } else {
-      // Ray not active, deselect selected meshes.
+      // Ray not active, rayout selected meshes.
       for (let id in this.selected) {
-        let handlers = this.handlers[id];
         let mesh = this.meshes[id];
 
         delete this.selected[id];
-        if (handlers.onDeselect) {
-          handlers.onDeselect(mesh);
-        }
         this.moveReticle_(null);
-        this.emit('deselect', mesh);
+        this.emit('rayout', mesh);
       }
     }
   }

@@ -33,12 +33,12 @@ export default class RayInput extends EventEmitter {
     // Arm model needed to transform controller orientation into proper pose.
     this.armModel = new OrientationArmModel();
 
-    this.controller.on('action', this.onAction_.bind(this));
-    this.controller.on('release', this.onRelease_.bind(this));
-    this.controller.on('cancel', this.onCancel_.bind(this));
+    this.controller.on('raydown', this.onRayDown_.bind(this));
+    this.controller.on('rayup', this.onRayUp_.bind(this));
+    this.controller.on('raycancel', this.onRayCancel_.bind(this));
     this.controller.on('pointermove', this.onPointerMove_.bind(this));
-    this.renderer.on('select', (mesh) => { this.emit('select', mesh) });
-    this.renderer.on('deselect', (mesh) => { this.emit('deselect', mesh) });
+    this.renderer.on('rayover', (mesh) => { this.emit('rayover', mesh) });
+    this.renderer.on('rayout', (mesh) => { this.emit('rayout', mesh) });
 
     // By default, put the pointer offscreen.
     this.pointerNdc = new THREE.Vector2(1, 1);
@@ -61,7 +61,7 @@ export default class RayInput extends EventEmitter {
     let lookAt = new THREE.Vector3(0, 0, -1);
     lookAt.applyQuaternion(this.camera.quaternion);
 
-    let mode = this.controller.getInteractionMode()
+    let mode = this.controller.getInteractionMode();
     switch (mode) {
       case InteractionModes.MOUSE:
         // Desktop mouse mode, mouse coordinates are what matters.
@@ -192,30 +192,30 @@ export default class RayInput extends EventEmitter {
     return new THREE.Vector3().crossVectors(lookAt, this.camera.up);
   }
 
-  onAction_(e) {
-    console.log('onAction_');
+  onRayDown_(e) {
+    //console.log('onRayDown_');
     this.fireActiveMeshEvent_('onAction');
 
     let mesh = this.renderer.getSelectedMesh();
-    this.emit('action', mesh);
+    this.emit('raydown', mesh);
 
     this.renderer.setActive(true);
   }
 
-  onRelease_(e) {
-    console.log('onRelease_');
+  onRayUp_(e) {
+    //console.log('onRayUp_');
     this.fireActiveMeshEvent_('onRelease');
 
     let mesh = this.renderer.getSelectedMesh();
-    this.emit('release', mesh);
+    this.emit('rayup', mesh);
 
     this.renderer.setActive(false);
   }
 
-  onCancel_(e) {
-    console.log('onCancel_');
+  onRayCancel_(e) {
+    //console.log('onRayCancel_');
     let mesh = this.renderer.getSelectedMesh();
-    this.emit('cancel', mesh);
+    this.emit('raycancel', mesh);
   }
 
   fireActiveMeshEvent_(eventName) {

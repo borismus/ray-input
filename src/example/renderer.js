@@ -48,11 +48,11 @@ export default class MenuRenderer {
     // Input manager.
     var rayInput = new RayInput(camera)
     rayInput.setSize(renderer.getSize());
-    rayInput.on('action', (opt_mesh) => { this.handleAction_(opt_mesh) });
-    rayInput.on('release', (opt_mesh) => { this.handleRelease_(opt_mesh) });
-    rayInput.on('cancel', (opt_mesh) => { this.handleCancel_(opt_mesh) });
-    rayInput.on('select', (mesh) => { this.setSelected_(mesh, true) });
-    rayInput.on('deselect', (mesh) => { this.setSelected_(mesh, false) });
+    rayInput.on('raydown', (opt_mesh) => { this.handleRayDown_(opt_mesh) });
+    rayInput.on('rayup', (opt_mesh) => { this.handleRayUp_(opt_mesh) });
+    rayInput.on('raycancel', (opt_mesh) => { this.handleRayCancel_(opt_mesh) });
+    rayInput.on('rayover', (mesh) => { this.setSelected_(mesh, true) });
+    rayInput.on('rayout', (mesh) => { this.setSelected_(mesh, false) });
 
     // Add the ray input mesh to the scene.
     scene.add(rayInput.getMesh());
@@ -93,15 +93,15 @@ export default class MenuRenderer {
     this.rayInput.setSize(this.renderer.getSize());
   }
 
-  handleAction_(opt_mesh) {
+  handleRayDown_(opt_mesh) {
     this.setAction_(opt_mesh, true);
   }
 
-  handleRelease_(opt_mesh) {
+  handleRayUp_(opt_mesh) {
     this.setAction_(opt_mesh, false);
   }
 
-  handleCancel_(opt_mesh) {
+  handleRayCancel_(opt_mesh) {
     this.setAction_(opt_mesh, false);
   }
 

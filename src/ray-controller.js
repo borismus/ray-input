@@ -47,9 +47,6 @@ export default class RayController extends EventEmitter {
     window.addEventListener('touchmove', this.onTouchMove_.bind(this));
     window.addEventListener('touchend', this.onTouchEnd_.bind(this));
 
-    // Listen to mouse events, set to true on first touch event.
-    this.isTouchSupported = false;
-
     // The position of the pointer.
     this.pointer = new THREE.Vector2();
     // The previous position of the pointer.
@@ -136,10 +133,10 @@ export default class RayController extends EventEmitter {
       // pressed action.
       let isGamepadPressed = this.getGamepadButtonPressed_();
       if (isGamepadPressed && !this.wasGamepadPressed) {
-        this.emit('action');
+        this.emit('raydown');
       }
       if (!isGamepadPressed && this.wasGamepadPressed) {
-        this.emit('release');
+        this.emit('rayup');
       }
       this.wasGamepadPressed = isGamepadPressed;
     }
@@ -161,46 +158,47 @@ export default class RayController extends EventEmitter {
   }
 
   onMouseDown_(e) {
-    if(!this.isTouchSupported) {
-      this.startDragging_(e);
-      this.emit('action');
-    }
+    this.startDragging_(e);
+    this.emit('raydown');
   }
 
   onMouseMove_(e) {
-    if(!this.isTouchSupported) {
-      this.updatePointer_(e);
-      this.updateDragDistance_();
-      this.emit('pointermove', this.pointerNdc);
-    }
+    this.updatePointer_(e);
+    this.updateDragDistance_();
+    this.emit('pointermove', this.pointerNdc);
   }
 
   onMouseUp_(e) {
-    if(!this.isTouchSupported) {
-      this.endDragging_();
-    }
+    this.endDragging_();
   }
 
   onTouchStart_(e) {
-    this.isTouchSupported = true;
-
     var t = e.touches[0];
     this.startDragging_(t);
     this.updateTouchPointer_(e);
 
     this.isTouchActive = true;
     this.emit('pointermove', this.pointerNdc);
-    this.emit('action');
+    this.emit('raydown');
+
+    // Prevent synthetic mouse event from being created.
+    e.preventDefault();
   }
 
   onTouchMove_(e) {
     this.updateTouchPointer_(e);
     this.updateDragDistance_();
+
+    // Prevent synthetic mouse event from being created.
+    e.preventDefault();
   }
 
   onTouchEnd_(e) {
     this.isTouchActive = false;
     this.endDragging_();
+
+    // Prevent synthetic mouse event from being created.
+    e.preventDefault();
   }
 
   updateTouchPointer_(e) {
@@ -227,9 +225,9 @@ export default class RayController extends EventEmitter {
       this.lastPointer.copy(this.pointer);
 
 
-      console.log('dragDistance', this.dragDistance);
+      //console.log('dragDistance', this.dragDistance);
       if (this.dragDistance > DRAG_DISTANCE_PX) {
-        this.emit('cancel');
+        this.emit('raycancel');
         this.isDragging = false;
       }
     }
@@ -242,7 +240,7 @@ export default class RayController extends EventEmitter {
 
   endDragging_() {
     if (this.dragDistance < DRAG_DISTANCE_PX) {
-      this.emit('release');
+      this.emit('rayup');
     }
     this.dragDistance = 0;
     this.isDragging = false;
