@@ -173,11 +173,11 @@ export default class RayController extends EventEmitter {
   }
 
   onTouchStart_(e) {
+    this.isTouchActive = true;
     var t = e.touches[0];
     this.startDragging_(t);
     this.updateTouchPointer_(e);
 
-    this.isTouchActive = true;
     this.emit('pointermove', this.pointerNdc);
     this.emit('raydown');
 
@@ -194,11 +194,11 @@ export default class RayController extends EventEmitter {
   }
 
   onTouchEnd_(e) {
-    this.isTouchActive = false;
     this.endDragging_();
 
     // Prevent synthetic mouse event from being created.
     e.preventDefault();
+    this.isTouchActive = false;
   }
 
   updateTouchPointer_(e) {

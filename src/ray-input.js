@@ -194,8 +194,9 @@ export default class RayInput extends EventEmitter {
 
   onRayDown_(e) {
     //console.log('onRayDown_');
-    this.fireActiveMeshEvent_('onAction');
 
+    // Force the renderer to raycast.
+    this.renderer.update();
     let mesh = this.renderer.getSelectedMesh();
     this.emit('raydown', mesh);
 
@@ -204,8 +205,6 @@ export default class RayInput extends EventEmitter {
 
   onRayUp_(e) {
     //console.log('onRayUp_');
-    this.fireActiveMeshEvent_('onRelease');
-
     let mesh = this.renderer.getSelectedMesh();
     this.emit('rayup', mesh);
 
@@ -216,24 +215,6 @@ export default class RayInput extends EventEmitter {
     //console.log('onRayCancel_');
     let mesh = this.renderer.getSelectedMesh();
     this.emit('raycancel', mesh);
-  }
-
-  fireActiveMeshEvent_(eventName) {
-    let mesh = this.renderer.getSelectedMesh();
-    if (!mesh) {
-      //console.info('No mesh selected.');
-      return;
-    }
-    let handlers = this.handlers[mesh.id];
-    if (!handlers) {
-      //console.info('No handlers for mesh with id %s.', mesh.id);
-      return;
-    }
-    if (!handlers[eventName]) {
-      //console.info('No handler named %s for mesh.', eventName);
-      return;
-    }
-    handlers[eventName](mesh);
   }
 
   onPointerMove_(ndc) {

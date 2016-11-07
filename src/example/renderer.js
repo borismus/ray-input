@@ -74,7 +74,7 @@ export default class MenuRenderer {
     scene.add(floor);
 
     menu.children.forEach(function(menuItem) {
-      console.log('menuItem', menuItem);
+      //console.log('menuItem', menuItem);
       rayInput.add(menuItem);
     });
   }
@@ -106,11 +106,13 @@ export default class MenuRenderer {
   }
 
   setSelected_(mesh, isSelected) {
+    //console.log('setSelected_', isSelected);
     var newColor = isSelected ? HIGHLIGHT_COLOR : DEFAULT_COLOR;
     mesh.material.color = newColor;
   }
 
   setAction_(opt_mesh, isActive) {
+    //console.log('setAction_', !!opt_mesh, isActive);
     if (opt_mesh) {
       var newColor = isActive ? ACTIVE_COLOR : HIGHLIGHT_COLOR;
       opt_mesh.material.color = newColor;

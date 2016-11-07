@@ -95,42 +95,35 @@ export default class RayRenderer extends EventEmitter {
   }
 
   update() {
-    if (this.isActive) {
-      // Do the raycasting and issue various events as needed.
-      for (let id in this.meshes) {
-        let mesh = this.meshes[id];
-        let intersects = this.raycaster.intersectObject(mesh, true);
-        if (intersects.length > 1) {
-          console.warn('Unexpected: multiple meshes intersected.');
-        }
-        let isIntersected = (intersects.length > 0);
-        let isSelected = this.selected[id];
+    // Do the raycasting and issue various events as needed.
+    for (let id in this.meshes) {
+      let mesh = this.meshes[id];
+      let intersects = this.raycaster.intersectObject(mesh, true);
+      if (intersects.length > 1) {
+        console.warn('Unexpected: multiple meshes intersected.');
+      }
+      let isIntersected = (intersects.length > 0);
+      let isSelected = this.selected[id];
 
-        // If it's newly selected, send rayover.
-        if (isIntersected && !isSelected) {
-          this.selected[id] = true;
+      // If it's newly selected, send rayover.
+      if (isIntersected && !isSelected) {
+        this.selected[id] = true;
+        if (this.isActive) {
           this.emit('rayover', mesh);
         }
-
-        // If it's no longer intersected, send rayout.
-        if (!isIntersected && isSelected) {
-          delete this.selected[id];
-          this.moveReticle_(null);
-          this.emit('rayout', mesh);
-        }
-
-        if (isIntersected) {
-          this.moveReticle_(intersects);
-        }
       }
-    } else {
-      // Ray not active, rayout selected meshes.
-      for (let id in this.selected) {
-        let mesh = this.meshes[id];
 
+      // If it's no longer intersected, send rayout.
+      if (!isIntersected && isSelected) {
         delete this.selected[id];
         this.moveReticle_(null);
-        this.emit('rayout', mesh);
+        if (this.isActive) {
+          this.emit('rayout', mesh);
+        }
+      }
+
+      if (isIntersected) {
+        this.moveReticle_(intersects);
       }
     }
   }
@@ -216,11 +209,25 @@ export default class RayRenderer extends EventEmitter {
   }
 
   /**
-   * Sets whether or not there is currently action.
+   * Enables and disables the raycaster. For touch, where finger up means we
+   * shouldn't be raycasting.
    */
   setActive(isActive) {
+    // If nothing changed, do nothing.
+    if (this.isActive == isActive) {
+      return;
+    }
     // TODO(smus): Show the ray or reticle adjust in response.
     this.isActive = isActive;
+
+    if (!isActive) {
+      this.moveReticle_(null);
+      for (let id in this.selected) {
+        let mesh = this.meshes[id];
+        delete this.selected[id];
+        this.emit('rayout', mesh);
+      }
+    }
   }
 
   updateRaycaster_() {
