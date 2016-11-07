@@ -34,7 +34,8 @@ You can also use require.js:
 
     require('./ray-input')
 
-Or you can use the script standalone:
+Or you can use the script standalone, but you may need to use `new
+RayInput.default()`:
 
     <script src="build/ray.min.js"></script>
 
