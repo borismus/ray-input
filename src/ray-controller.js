@@ -33,13 +33,10 @@ const DRAG_DISTANCE_PX = 10;
  *    pointermove(2D position): The pointer is moved (mouse or touch).
  */
 export default class RayController extends EventEmitter {
-  constructor(renderer) {
+  constructor(opt_el) {
     super();
-    this.renderer = renderer;
+    let el = opt_el || window;
 
-    this.availableInteractions = {};
-
-    let el = renderer.domElement;
     // Handle interactions.
     el.addEventListener('mousedown', this.onMouseDown_.bind(this));
     el.addEventListener('mousemove', this.onMouseMove_.bind(this));

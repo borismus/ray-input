@@ -43,8 +43,9 @@ RayInput.default()`:
 
 How to instantiate the input library:
 
-    // Here, camera is an instance of THREE.Camera.
-    var input = new RayInput(camera);
+    // Here, camera is an instance of THREE.Camera,
+    // If second HTMLElement arg is provided, it will be addEventListener'ed.
+    var input = new RayInput(camera, renderer.domElement);
 
 How to register objects that can be interacted with:
 

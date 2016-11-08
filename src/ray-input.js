@@ -23,12 +23,12 @@ import InteractionModes from './ray-interaction-modes'
  * API wrapper for the input library.
  */
 export default class RayInput extends EventEmitter {
-  constructor(camera) {
+  constructor(camera, opt_el) {
     super();
 
     this.camera = camera;
     this.renderer = new RayRenderer(camera);
-    this.controller = new RayController();
+    this.controller = new RayController(opt_el);
 
     // Arm model needed to transform controller orientation into proper pose.
     this.armModel = new OrientationArmModel();
