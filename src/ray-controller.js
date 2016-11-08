@@ -39,13 +39,14 @@ export default class RayController extends EventEmitter {
 
     this.availableInteractions = {};
 
+    let el = renderer.domElement;
     // Handle interactions.
-    window.addEventListener('mousedown', this.onMouseDown_.bind(this));
-    window.addEventListener('mousemove', this.onMouseMove_.bind(this));
-    window.addEventListener('mouseup', this.onMouseUp_.bind(this));
-    window.addEventListener('touchstart', this.onTouchStart_.bind(this));
-    window.addEventListener('touchmove', this.onTouchMove_.bind(this));
-    window.addEventListener('touchend', this.onTouchEnd_.bind(this));
+    el.addEventListener('mousedown', this.onMouseDown_.bind(this));
+    el.addEventListener('mousemove', this.onMouseMove_.bind(this));
+    el.addEventListener('mouseup', this.onMouseUp_.bind(this));
+    el.addEventListener('touchstart', this.onTouchStart_.bind(this));
+    el.addEventListener('touchmove', this.onTouchMove_.bind(this));
+    el.addEventListener('touchend', this.onTouchEnd_.bind(this));
 
     // The position of the pointer.
     this.pointer = new THREE.Vector2();
