@@ -57,6 +57,8 @@ export default class RayController extends EventEmitter {
     this.isDragging = false;
     // Is pointer active or not.
     this.isTouchActive = false;
+    // Is this a synthetic mouse event?
+    this.isSyntheticMouseEvent = false;
 
     // Gamepad events.
     this.gamepad = null;
@@ -120,6 +122,22 @@ export default class RayController extends EventEmitter {
     return this.isTouchActive;
   }
 
+  /**
+   * Checks if this click is the cardboard-compatible fallback
+   * click on Daydream controllers so that we can deduplicate it.
+   * TODO(klausw): It would be nice to be able to move interactions
+   * to this event since it counts as a user action while controller
+   * clicks don't. But that would require larger refactoring.
+   */
+  isCardboardCompatClick(ev) {
+    let mode = this.getInteractionMode();
+    if (mode == _rayInteractionModes2.default.VR_3DOF &&
+        ev.screenX == 0 && ev.screenY == 0) {
+      return true;
+    }
+    return false;
+  }
+
   setSize(size) {
     this.size = size;
   }
@@ -156,17 +174,26 @@ export default class RayController extends EventEmitter {
   }
 
   onMouseDown_(e) {
+    if (this.isSyntheticMouseEvent) return;
+    if (this.isCardboardCompatClick(e)) return;
+
     this.startDragging_(e);
     this.emit('raydown');
   }
 
   onMouseMove_(e) {
+    if (this.isSyntheticMouseEvent) return;
+
     this.updatePointer_(e);
     this.updateDragDistance_();
     this.emit('pointermove', this.pointerNdc);
   }
 
   onMouseUp_(e) {
+    if (this.isSyntheticMouseEvent) return;
+    this.isSyntheticMouseEvent = false;
+    if (this.isCardboardCompatClick(e)) return;
+
     this.endDragging_();
   }
 
@@ -178,24 +205,18 @@ export default class RayController extends EventEmitter {
 
     this.emit('pointermove', this.pointerNdc);
     this.emit('raydown');
-
-    // Prevent synthetic mouse event from being created.
-    e.preventDefault();
   }
 
   onTouchMove_(e) {
     this.updateTouchPointer_(e);
     this.updateDragDistance_();
-
-    // Prevent synthetic mouse event from being created.
-    e.preventDefault();
   }
 
   onTouchEnd_(e) {
     this.endDragging_();
 
-    // Prevent synthetic mouse event from being created.
-    e.preventDefault();
+    // Suppress duplicate events from synthetic mouse events.
+    this.isSyntheticMouseEvent = true;
     this.isTouchActive = false;
   }
 
