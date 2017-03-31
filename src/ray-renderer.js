@@ -84,7 +84,7 @@ export default class RayRenderer extends EventEmitter {
    */
   remove(object) {
     var id = object.id;
-    if (!this.meshes[id]) {
+    if (this.meshes[id]) {
       // If there's no existing mesh, we can't remove it.
       delete this.meshes[id];
     }
