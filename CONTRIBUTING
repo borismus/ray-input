@@ -7,8 +7,8 @@ This package lives in the npm index.
 Relevant commands:
 
     npm install - installs the dependencies.
-    npm build - builds the module.
-    npm watch - auto-builds the module whenever any source changes.
+    npm run build - builds the module.
+    npm run watch - auto-builds the module whenever any source changes.
 
 
 # Updating the npm entry
