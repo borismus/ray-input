@@ -129,10 +129,9 @@ export default class RayController extends EventEmitter {
    * to this event since it counts as a user action while controller
    * clicks don't. But that would require larger refactoring.
    */
-  isCardboardCompatClick(ev) {
+  isCardboardCompatClick(e) {
     let mode = this.getInteractionMode();
-    if (mode == _rayInteractionModes2.default.VR_3DOF &&
-        ev.screenX == 0 && ev.screenY == 0) {
+    if (mode == InteractionModes.VR_3DOF && e.screenX == 0 && e.screenY == 0) {
       return true;
     }
     return false;
