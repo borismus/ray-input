@@ -189,8 +189,9 @@ export default class RayController extends EventEmitter {
   }
 
   onMouseUp_(e) {
-    if (this.isSyntheticMouseEvent) return;
+    var isSynthetic = this.isSyntheticMouseEvent;
     this.isSyntheticMouseEvent = false;
+    if (isSynthetic) return;
     if (this.isCardboardCompatClick(e)) return;
 
     this.endDragging_();
