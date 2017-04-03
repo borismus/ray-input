@@ -116,6 +116,9 @@ export default class MenuRenderer {
     if (opt_mesh) {
       var newColor = isActive ? ACTIVE_COLOR : HIGHLIGHT_COLOR;
       opt_mesh.material.color = newColor;
+      if (!isActive) {
+        opt_mesh.material.wireframe = !opt_mesh.material.wireframe;
+      }
     }
   }
 
