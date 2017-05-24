@@ -122,6 +122,7 @@ export default class RayInput extends EventEmitter {
         this.armModel.setHeadOrientation(this.camera.quaternion);
         this.armModel.setHeadPosition(this.camera.position);
         this.armModel.setControllerOrientation(controllerOrientation);
+        this.armModel.setLeftHanded(this.controller.isLeftHanded);
         this.armModel.update();
 
         // Get resulting pose and configure the renderer.

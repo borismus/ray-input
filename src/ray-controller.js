@@ -59,7 +59,8 @@ export default class RayController extends EventEmitter {
     this.isTouchActive = false;
     // Is this a synthetic mouse event?
     this.isSyntheticMouseEvent = false;
-
+    //  Is lefthanded
+    this.isLeftHanded = false;
     // Gamepad events.
     this.gamepad = null;
 
@@ -79,7 +80,15 @@ export default class RayController extends EventEmitter {
 
     var gamepad = this.getVRGamepad_();
 
+    this.gamepad = gamepad;
     if (gamepad) {
+      if(gamepad.hand){
+        if(gamepad.hand === 'left'){
+          this.isLeftHanded = true;
+        }else{
+          this.isLeftHanded = false;
+        }
+      }
       let pose = gamepad.pose;
       // If there's a gamepad connected, determine if it's Daydream or a Vive.
       if (pose.hasPosition) {

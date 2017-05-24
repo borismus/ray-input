@@ -13,7 +13,9 @@
  * limitations under the License.
  */
 
-const HEAD_ELBOW_OFFSET = new THREE.Vector3(0.155, -0.465, -0.15);
+const HEAD_ELBOW_OFFSET_RIGHTHANDED = new THREE.Vector3(0.155, -0.465, -0.15);
+const HEAD_ELBOW_OFFSET_LEFTHANDED = new THREE.Vector3(-0.155, -0.465, -0.15);
+let head_elbow_offset = HEAD_ELBOW_OFFSET_RIGHTHANDED;
 const ELBOW_WRIST_OFFSET = new THREE.Vector3(0, 0, -0.25);
 const WRIST_CONTROLLER_OFFSET = new THREE.Vector3(0, 0, 0.05);
 const ARM_EXTENSION_OFFSET = new THREE.Vector3(-0.08, 0.14, 0.08);
@@ -78,8 +80,12 @@ export default class OrientationArmModel {
   }
 
   setLeftHanded(isLeftHanded) {
-    // TODO(smus): Implement me!
     this.isLeftHanded = isLeftHanded;
+    if(isLeftHanded){
+      head_elbow_offset = HEAD_ELBOW_OFFSET_LEFTHANDED;
+    }else{
+      head_elbow_offset = HEAD_ELBOW_OFFSET_RIGHTHANDED;
+    }
   }
 
   /**
@@ -115,7 +121,7 @@ export default class OrientationArmModel {
 
     // Calculate elbow position.
     let elbowPos = this.elbowPos;
-    elbowPos.copy(this.headPos).add(HEAD_ELBOW_OFFSET);
+    elbowPos.copy(this.headPos).add(head_elbow_offset);
     let elbowOffset = new THREE.Vector3().copy(ARM_EXTENSION_OFFSET);
     elbowOffset.multiplyScalar(extensionRatio);
     elbowPos.add(elbowOffset);
