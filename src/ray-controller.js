@@ -81,6 +81,13 @@ export default class RayController extends EventEmitter {
 
     if (gamepad) {
       let pose = gamepad.pose;
+
+      if (!pose) {
+        // Cardboard touch emulation reports as a 0-DOF
+        // 1-button clicker gamepad.
+        return InteractionModes.VR_0DOF;
+      }
+
       // If there's a gamepad connected, determine if it's Daydream or a Vive.
       if (pose.hasPosition) {
         return InteractionModes.VR_6DOF;
@@ -111,7 +118,7 @@ export default class RayController extends EventEmitter {
 
   getGamepadPose() {
     var gamepad = this.getVRGamepad_();
-    return gamepad.pose;
+    return gamepad.pose || {};
   }
 
   /**
@@ -125,13 +132,18 @@ export default class RayController extends EventEmitter {
   /**
    * Checks if this click is the cardboard-compatible fallback
    * click on Daydream controllers so that we can deduplicate it.
-   * TODO(klausw): It would be nice to be able to move interactions
-   * to this event since it counts as a user action while controller
-   * clicks don't. But that would require larger refactoring.
+   * This happens on Chrome <=61 when a Daydream controller
+   * is active, it registers as a 3DOF device. Not applicable
+   * for Chrome >= 62 or other browsers which don't do this.
+   *
+   * Also need to handle Daydream View on Chrome 61 which in
+   * Cardboard mode exposes both the 0DOF clicker device and
+   * the compatibility click.
    */
   isCardboardCompatClick(e) {
     let mode = this.getInteractionMode();
-    if (mode == InteractionModes.VR_3DOF && e.screenX == 0 && e.screenY == 0) {
+    if ((mode == InteractionModes.VR_0DOF || mode == InteractionModes.VR_3DOF) &&
+        e.screenX == 0 && e.screenY == 0) {
       return true;
     }
     return false;
@@ -143,7 +155,9 @@ export default class RayController extends EventEmitter {
 
   update() {
     let mode = this.getInteractionMode();
-    if (mode == InteractionModes.VR_3DOF || mode == InteractionModes.VR_6DOF) {
+    if (mode == InteractionModes.VR_0DOF ||
+        mode == InteractionModes.VR_3DOF ||
+        mode == InteractionModes.VR_6DOF) {
       // If we're dealing with a gamepad, check every animation frame for a
       // pressed action.
       let isGamepadPressed = this.getGamepadButtonPressed_();
@@ -279,8 +293,9 @@ export default class RayController extends EventEmitter {
       var gamepad = gamepads[i];
 
       // The array may contain undefined gamepads, so check for that as well as
-      // a non-null pose.
-      if (gamepad && gamepad.pose) {
+      // a non-null pose. Clicker devices such as Cardboard button emulation
+      // have a displayId but no pose.
+      if (gamepad && (gamepad.pose || gamepad.displayId)) {
         return gamepad;
       }
     }
