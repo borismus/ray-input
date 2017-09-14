@@ -82,7 +82,7 @@ export default class RayController extends EventEmitter {
 
     this.gamepad = gamepad;
     if (gamepad) {
-      if(gamepad.hand){
+      if(gamepad.hand) {
         this.isLeftHanded = (gamepad.hand === 'left');
       }
       let pose = gamepad.pose;
