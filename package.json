@@ -1,6 +1,6 @@
 {
   "name": "ray-input",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Cross platform VR input capabilities. For desktop, mobile, Cardboard, Daydream and Vive.",
   "main": "src/ray-input.js",
   "scripts": {
