@@ -81,7 +81,7 @@ export default class OrientationArmModel {
 
   setLeftHanded(isLeftHanded) {
     this.isLeftHanded = isLeftHanded;
-    if (isLeftHanded){
+    if (isLeftHanded) {
       headElbowOffset = HEAD_ELBOW_OFFSET_LEFTHANDED;
     }else{
       headElbowOffset = HEAD_ELBOW_OFFSET_RIGHTHANDED;
