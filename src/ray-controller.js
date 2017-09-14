@@ -59,7 +59,8 @@ export default class RayController extends EventEmitter {
     this.isTouchActive = false;
     // Is this a synthetic mouse event?
     this.isSyntheticMouseEvent = false;
-
+    // Is lefthanded.
+    this.isLeftHanded = false;
     // Gamepad events.
     this.gamepad = null;
 
@@ -79,7 +80,11 @@ export default class RayController extends EventEmitter {
 
     var gamepad = this.getVRGamepad_();
 
+    this.gamepad = gamepad;
     if (gamepad) {
+      if(gamepad.hand){
+        this.isLeftHanded = (gamepad.hand === 'left');
+      }
       let pose = gamepad.pose;
 
       if (!pose) {
